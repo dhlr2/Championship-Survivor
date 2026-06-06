@@ -1,0 +1,164 @@
+:root {
+  /* Core palette — dark stadium night */
+  --bg-primary: #080C10;
+  --bg-secondary: #0E1318;
+  --bg-card: #111820;
+  --bg-card-hover: #16202B;
+  --border: rgba(255,255,255,0.07);
+  --border-active: rgba(0,255,135,0.3);
+
+  /* Accent — electric green (pitch) */
+  --accent: #00FF87;
+  --accent-dim: rgba(0,255,135,0.15);
+  --accent-glow: 0 0 20px rgba(0,255,135,0.35);
+
+  /* Cards */
+  --yellow: #FFD700;
+  --yellow-glow: 0 0 12px rgba(255,215,0,0.4);
+  --red: #FF3B3B;
+  --red-glow: 0 0 12px rgba(255,59,59,0.4);
+
+  /* Text */
+  --text-primary: #F0F4F8;
+  --text-secondary: #7A8C99;
+  --text-muted: #445566;
+
+  /* Typography */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Pitch texture background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(0,255,135,0.012) 60px,
+      rgba(0,255,135,0.012) 61px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
+
+/* Utility classes */
+.display-font { font-family: var(--font-display); letter-spacing: 0.02em; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.card:hover { border-color: rgba(255,255,255,0.12); background: var(--bg-card-hover); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.18s var(--ease);
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #080C10;
+}
+.btn-primary:hover {
+  box-shadow: var(--accent-glow);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover {
+  border-color: var(--border-active);
+  color: var(--accent);
+}
+.btn-danger {
+  background: var(--red);
+  color: white;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.input {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 12px 16px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.input::placeholder { color: var(--text-muted); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-active { background: rgba(0,255,135,0.15); color: var(--accent); }
+.badge-waiting { background: rgba(122,140,153,0.15); color: var(--text-secondary); }
+.badge-finished { background: rgba(255,59,59,0.1); color: var(--red); }
+
+/* Card animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
+}
+
+.fade-up { animation: fadeUp 0.4s var(--ease) both; }

@@ -1,0 +1,14 @@
+﻿# Environment variables - NEVER commit these
+backend/.env
+frontend-web/.env
+
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build output
+frontend-web/dist/
+frontend-mobile/.expo/
+
+# Logs
+*.log

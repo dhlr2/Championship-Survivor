@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Last Man Standing",
+    "slug": "lastmanstanding",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#080C10",
+    "splash": {
+      "backgroundColor": "#080C10",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yourname.lastmanstanding"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#080C10"
+      },
+      "package": "com.yourname.lastmanstanding"
+    },
+    "scheme": "lastmanstanding",
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
