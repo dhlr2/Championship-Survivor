@@ -186,7 +186,7 @@ export default function RoomPage() {
           />
         )}
         {tab === 'players' && (
-          <PlayersTab members={members} currentUserId={user?.id} />
+          <PlayersTab members={members} currentUserId={user?.id} allPicks={allPicks} gw={gw} />
         )}
         {tab === 'fixtures' && (
           <FixturesTab fixtures={pickData?.fixtures || []} />
@@ -317,33 +317,106 @@ function PickTab({ gw, pickData, myMembership, roomStatus, onPick, picking, allP
 }
 
 // ─── TAB: PLAYERS ──────────────────────────────────────────────────────────
-function PlayersTab({ members, currentUserId }) {
-  const sorted = [...members].sort((a, b) => a.cards - b.cards);
+function PlayersTab({ members, currentUserId, allPicks, gw }) {
+  // Sort: active first, then yellow card, then eliminated. Within groups sort by username.
+  const sorted = [...members].sort((a, b) => {
+    const order = { active: 0, yellow_card: 1, eliminated: 2 };
+    const diff = (order[a.status] ?? 0) - (order[b.status] ?? 0);
+    if (diff !== 0) return diff;
+    return a.username.localeCompare(b.username);
+  });
+
+  // Build a map of userId -> this week pick
+  const pickMap = {};
+  allPicks.forEach(p => { pickMap[p.user_id] = p; });
+
+  const active = sorted.filter(m => m.status === 'active').length;
+  const eliminated = sorted.filter(m => m.status === 'eliminated').length;
+
   return (
-    <div className={styles.playersList}>
-      {sorted.map((m, i) => (
-        <div key={m.user_id} className={`${styles.playerRow} ${m.status === 'eliminated' ? styles.playerEliminated : ''}`}>
-          <span className={styles.rank}>#{i + 1}</span>
-          <div className={styles.playerAvatar} style={{ background: m.avatar_color }}>
-            {m.username[0].toUpperCase()}
-          </div>
-          <span className={styles.playerName}>
-            {m.username}{m.user_id === currentUserId && ' (you)'}
-          </span>
-          <div className={styles.playerStatus}>
-            {m.status === 'eliminated' && <span className={styles.redText}>Eliminated</span>}
-            {m.status === 'yellow_card' && <span className={styles.yellowText}>⚠ Warning</span>}
-            {m.status === 'active' && <span className={styles.greenText}>Active</span>}
-          </div>
-          <div className={styles.cardSlots}>
-            {[0, 1].map(i => (
-              <div key={i} className={`${styles.cardSlot} ${
-                i < m.cards ? (m.cards >= 2 ? styles.cardRed : styles.cardYellow) : ''
-              }`} />
-            ))}
-          </div>
+    <div>
+      {/* Summary bar */}
+      <div className={styles.leaderboardSummary}>
+        <div className={styles.lbStat}>
+          <span className={styles.lbStatNum} style={{ color: 'var(--accent)' }}>{active}</span>
+          <span className={styles.lbStatLabel}>Still In</span>
         </div>
-      ))}
+        <div className={styles.lbStatDivider} />
+        <div className={styles.lbStat}>
+          <span className={styles.lbStatNum} style={{ color: 'var(--yellow)' }}>{sorted.filter(m => m.status === 'yellow_card').length}</span>
+          <span className={styles.lbStatLabel}>On Warning</span>
+        </div>
+        <div className={styles.lbStatDivider} />
+        <div className={styles.lbStat}>
+          <span className={styles.lbStatNum} style={{ color: 'var(--red)' }}>{eliminated}</span>
+          <span className={styles.lbStatLabel}>Eliminated</span>
+        </div>
+      </div>
+
+      {/* Column headers */}
+      <div className={styles.lbHeader}>
+        <span style={{ width: 32 }}>#</span>
+        <span style={{ flex: 1 }}>Player</span>
+        <span style={{ width: 120, textAlign: 'center' }}>This Week</span>
+        <span style={{ width: 80, textAlign: 'center' }}>Cards</span>
+        <span style={{ width: 90, textAlign: 'right' }}>Status</span>
+      </div>
+
+      <div className={styles.playersList}>
+        {sorted.map((m, i) => {
+          const pick = pickMap[m.user_id];
+          const isYou = m.user_id === currentUserId;
+          return (
+            <div
+              key={m.user_id}
+              className={`${styles.leaderboardRow} ${m.status === 'eliminated' ? styles.playerEliminated : ''} ${isYou ? styles.leaderboardRowYou : ''}`}
+            >
+              <span className={styles.rank}>#{i + 1}</span>
+              <div className={styles.lbPlayer}>
+                <div className={styles.playerAvatar} style={{ background: m.avatar_color }}>
+                  {m.username[0].toUpperCase()}
+                </div>
+                <div>
+                  <span className={styles.playerName}>
+                    {m.username}{isYou && <span className={styles.youTag}> you</span>}
+                  </span>
+                </div>
+              </div>
+
+              {/* This week pick */}
+              <div className={styles.lbPick}>
+                {pick ? (
+                  <div className={styles.lbPickInner}>
+                    {pick.team_crest && <img src={pick.team_crest} alt="" className={styles.crestTiny} />}
+                    <span className={styles.lbPickTeam}>{pick.team_short || pick.team_name}</span>
+                    {pick.result && <ResultChip result={pick.result} small />}
+                  </div>
+                ) : (
+                  <span className={styles.lbNoPick}>
+                    {m.status === 'eliminated' ? '—' : 'Not picked'}
+                  </span>
+                )}
+              </div>
+
+              {/* Cards */}
+              <div className={styles.lbCards}>
+                {[0, 1].map(ci => (
+                  <div key={ci} className={`${styles.cardSlot} ${
+                    ci < m.cards ? (m.cards >= 2 ? styles.cardRed : styles.cardYellow) : ''
+                  }`} />
+                ))}
+              </div>
+
+              {/* Status */}
+              <div className={styles.lbStatus}>
+                {m.status === 'eliminated' && <span className={styles.redText}>🟥 Out</span>}
+                {m.status === 'yellow_card' && <span className={styles.yellowText}>🟨 Warning</span>}
+                {m.status === 'active' && <span className={styles.greenText}>✅ Safe</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

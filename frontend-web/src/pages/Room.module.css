@@ -394,3 +394,77 @@
   font-weight: 600;
   margin-bottom: 24px;
 }
+
+/* Leaderboard */
+.leaderboardSummary {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 32px;
+  margin-bottom: 20px;
+}
+.lbStat { flex: 1; text-align: center; }
+.lbStatNum { display: block; font-family: var(--font-display); font-size: 2.2rem; line-height: 1; }
+.lbStatLabel { display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+.lbStatDivider { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+
+.lbHeader {
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.leaderboardRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: border-color 0.15s;
+}
+.leaderboardRow:hover { border-color: rgba(255,255,255,0.12); }
+.leaderboardRowYou { border-color: var(--border-active) !important; background: rgba(0,255,135,0.03); }
+
+.lbPlayer { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+
+.lbPick { width: 120px; display: flex; justify-content: center; }
+.lbPickInner { display: flex; align-items: center; gap: 6px; }
+.lbPickTeam { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70px; }
+.lbNoPick { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
+
+.lbCards { width: 80px; display: flex; justify-content: center; gap: 5px; }
+
+.lbStatus { width: 90px; text-align: right; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+
+.youTag {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 100px;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .lbHeader { display: none; }
+  .leaderboardRow { flex-wrap: wrap; gap: 8px; }
+  .lbPick { width: auto; flex: 1; justify-content: flex-start; }
+  .lbCards { width: auto; }
+  .lbStatus { width: auto; }
+  .leaderboardSummary { padding: 16px; }
+}
