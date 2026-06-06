@@ -214,14 +214,7 @@ function PickTab({ gw, pickData, myMembership, roomStatus, onPick, picking, allP
       </div>
     );
   }
-  if (myMembership?.status === 'eliminated') {
-    return (
-      <div className={styles.centeredMsg}>
-        <span className={styles.bigEmoji}>🟥</span>
-        <p>You've been eliminated. Better luck next game!</p>
-      </div>
-    );
-  }
+  const isEliminated = myMembership?.status === 'eliminated';
   if (!gw) return null;
 
   const currentPick = pickData?.currentPick;
@@ -230,6 +223,14 @@ function PickTab({ gw, pickData, myMembership, roomStatus, onPick, picking, allP
 
   return (
     <div className={styles.pickContainer}>
+      {/* Eliminated banner */}
+      {isEliminated && (
+        <div className={styles.eliminatedBanner}>
+          <span>🟥</span>
+          <span>You have been eliminated. You can still watch the game but cannot make picks.</span>
+        </div>
+      )}
+
       {/* Current pick this week */}
       <section className={styles.section}>
         <h2 className={`display-font ${styles.sectionTitle}`}>
@@ -243,9 +244,9 @@ function PickTab({ gw, pickData, myMembership, roomStatus, onPick, picking, allP
               <ResultChip result={currentPick.result} />
             )}
           </div>
-        ) : (
+        ) : !isEliminated ? (
           <p className={styles.hint}>Choose your team for this gameweek below.</p>
-        )}
+        ) : null}
       </section>
 
       {/* This week's picks by others */}
@@ -271,7 +272,7 @@ function PickTab({ gw, pickData, myMembership, roomStatus, onPick, picking, allP
       )}
 
       {/* Team picker */}
-      {!currentPick && (
+      {!currentPick && !isEliminated && (
         <section className={styles.section}>
           <h2 className={`display-font ${styles.sectionTitle}`}>
             AVAILABLE TEAMS ({available.length})
