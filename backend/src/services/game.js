@@ -116,11 +116,38 @@ async function resolveGameweek(roomId, gameweekId) {
     return { resolved: results.length, results, winner: null };
   }
 
-  // Mark gameweek complete
-  await db.query(
-    `UPDATE gameweeks SET status='completed' WHERE id=$1`,
+  // Check if ALL picks for this gameweek have been resolved
+  const unresolvedRes = await db.query(
+    `SELECT COUNT(*) FROM picks WHERE gameweek_id=$1 AND result IS NULL`,
     [gameweekId]
   );
+  const unresolved = parseInt(unresolvedRes.rows[0].count);
+
+  if (unresolved === 0 && results.length > 0) {
+    // Mark gameweek complete
+    await db.query(
+      `UPDATE gameweeks SET status='completed' WHERE id=$1`,
+      [gameweekId]
+    );
+
+    // Auto-advance to next gameweek
+    const roomRes = await db.query('SELECT current_gameweek FROM rooms WHERE id=$1', [roomId]);
+    const nextMatchday = (roomRes.rows[0]?.current_gameweek || 1) + 1;
+
+    await db.query(
+      `INSERT INTO gameweeks (room_id, week_number, status)
+       VALUES ($1,$2,'open')
+       ON CONFLICT (room_id, week_number) DO UPDATE SET status='open'`,
+      [roomId, nextMatchday]
+    );
+
+    await db.query(
+      'UPDATE rooms SET current_gameweek=$1 WHERE id=$2',
+      [nextMatchday, roomId]
+    );
+
+    return { resolved: results.length, results, advanced: true, nextMatchday };
+  }
 
   return { resolved: results.length, results };
 }

@@ -14,7 +14,8 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res.data,
   (err) => {
-    if (err.response?.status === 401) {
+    // Only redirect to login if 401 happens on an authenticated request (not on login itself)
+    if (err.response?.status === 401 && !err.config?.url?.includes('/auth/')) {
       localStorage.removeItem('lms_token');
       localStorage.removeItem('lms_user');
       window.location.href = '/login';

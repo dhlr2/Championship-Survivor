@@ -19,7 +19,6 @@ export default function RoomPage() {
   const [allPicks, setAllPicks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [picking, setPicking] = useState(false);
-  const [resolving, setResolving] = useState(false);
   const [tab, setTab] = useState('pick'); // 'pick' | 'players' | 'fixtures'
 
   const isCreator = room?.creator_id === user?.id;
@@ -55,14 +54,6 @@ export default function RoomPage() {
     } catch (err) { toast.error(err.toString()); }
   }
 
-  async function nextWeek() {
-    try {
-      await api.post(`/rooms/${id}/next-week`);
-      toast.success('Advanced to next gameweek!');
-      load();
-    } catch (err) { toast.error(err.toString()); }
-  }
-
   async function endGame() {
     if (!window.confirm('Are you sure you want to end the game? This cannot be undone.')) return;
     try {
@@ -70,22 +61,6 @@ export default function RoomPage() {
       toast.success('Game ended!');
       load();
     } catch (err) { toast.error(err.toString()); }
-  }
-
-  async function resolveWeek() {
-    setResolving(true);
-    try {
-      const result = await api.post(`/picks/room/${id}/resolve`, { gameweekId: gw.id });
-      if (result.winner) {
-        toast.success('🏆 We have a winner!');
-      } else if (result.resolved === 0) {
-        toast('No finished matches to resolve yet', { icon: '⏳' });
-      } else {
-        toast.success(`Resolved ${result.resolved} picks!`);
-      }
-      load();
-    } catch (err) { toast.error(err.toString()); }
-    setResolving(false);
   }
 
   async function makePick(team) {
@@ -145,14 +120,9 @@ export default function RoomPage() {
             </button>
           )}
           {room.status === 'active' && gw && (
-            <>
-              <button className="btn btn-ghost" onClick={resolveWeek} disabled={resolving}>
-                {resolving ? 'Resolving...' : '⚡ Resolve Results'}
-              </button>
-              <button className="btn btn-ghost" onClick={nextWeek}>
-                ⏭ Next Gameweek
-              </button>
-            </>
+            <span className={styles.creatorLabel} style={{color:'var(--text-muted)', fontSize:'0.78rem'}}>
+              ⚡ Results process automatically after matches finish
+            </span>
           )}
         </div>
       )}
