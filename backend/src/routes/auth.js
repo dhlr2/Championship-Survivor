@@ -10,6 +10,13 @@ router.post('/register', async (req, res) => {
     if (!email || !username || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
+
+    // Validate email format properly
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Please enter a valid email address' });
+    }
+
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
