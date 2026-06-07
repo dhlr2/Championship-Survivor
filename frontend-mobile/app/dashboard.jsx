@@ -30,6 +30,11 @@ export default function DashboardScreen() {
 
   useEffect(() => { fetchRooms(); }, []);
 
+  // Redirect to login if user logs out
+  useEffect(() => {
+    if (!user) router.replace('/login');
+  }, [user]);
+
   // Refresh when navigating back to this screen
   useFocusEffect(useCallback(() => { fetchRooms(); }, []));
 
