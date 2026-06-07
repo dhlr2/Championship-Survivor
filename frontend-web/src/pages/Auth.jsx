@@ -42,8 +42,8 @@ export default function AuthPage() {
         {/* Logo */}
         <div className={styles.logo}>
           <div className={styles.logoIcon}>⚽</div>
-          <h1 className={styles.logoText}>LAST MAN<br />STANDING</h1>
-          <p className={styles.tagline}>EFL Championship Survival Game</p>
+          <h1 className={styles.logoText}>CHAMPIONSHIP<br />SURVIVOR</h1>
+          <p className={styles.tagline}>Will you be the last man standing?</p>
         </div>
 
         {/* Auth card */}
@@ -119,7 +119,7 @@ export default function AuthPage() {
         </div>
 
         <p className={styles.footer}>
-          Pick wisely. Survive longer. Be the last.
+          Pick smart. Stay alive. Be the last.
         </p>
       </div>
     </div>

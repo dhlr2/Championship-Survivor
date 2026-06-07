@@ -72,7 +72,7 @@ export default function Dashboard() {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <h1 className={`display-font ${styles.logo}`}>LMS</h1>
+          <h1 className={`display-font ${styles.logo}`}>CS</h1>
           <div className={styles.headerRight}>
             <div className={styles.avatar} style={{ background: user?.avatar_color }}>
               {user?.username?.[0]?.toUpperCase()}

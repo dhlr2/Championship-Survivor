@@ -41,7 +41,7 @@ export default function LoginScreen() {
         {/* Logo area */}
         <View style={styles.logoArea}>
           <Text style={styles.ball}>⚽</Text>
-          <Text style={styles.title}>LAST MAN{'\n'}STANDING</Text>
+          <Text style={styles.title}>CHAMPIONSHIP{'\n'}SURVIVOR</Text>
           <Text style={styles.tagline}>EFL CHAMPIONSHIP SURVIVAL GAME</Text>
         </View>
 
@@ -119,7 +119,7 @@ export default function LoginScreen() {
           </View>
         </View>
 
-        <Text style={styles.footer}>Pick wisely. Survive longer. Be the last.</Text>
+        <Text style={styles.footer}>Pick smart. Stay alive. Be the last.</Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );
