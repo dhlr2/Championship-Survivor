@@ -254,5 +254,25 @@ router.post('/:id/end', authenticate, async (req, res) => {
   }
 });
 
+
+// DELETE /api/rooms/:id — creator deletes the room and all data
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const roomRes = await db.query('SELECT * FROM rooms WHERE id=$1', [req.params.id]);
+    const room = roomRes.rows[0];
+    if (!room) return res.status(404).json({ error: 'Room not found' });
+    if (room.creator_id !== req.user.id) return res.status(403).json({ error: 'Only the creator can delete this room' });
+
+    // CASCADE deletes room_members, gameweeks, picks automatically (set up in schema)
+    await db.query('DELETE FROM rooms WHERE id=$1', [req.params.id]);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;
+
 

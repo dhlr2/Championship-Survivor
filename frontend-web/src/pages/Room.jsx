@@ -63,6 +63,15 @@ export default function RoomPage() {
     } catch (err) { toast.error(err.toString()); }
   }
 
+  async function deleteRoom() {
+    if (!window.confirm('Are you sure you want to DELETE this room? This will permanently remove all picks, results and players. This cannot be undone.')) return;
+    try {
+      await api.delete(`/rooms/${id}`);
+      toast.success('Room deleted.');
+      navigate('/dashboard');
+    } catch (err) { toast.error(err.toString()); }
+  }
+
   async function makePick(team) {
     if (!gw) return;
     setPicking(team.id);
@@ -119,6 +128,9 @@ export default function RoomPage() {
               🏁 End Game
             </button>
           )}
+          <button className="btn btn-danger" onClick={deleteRoom} style={{background:'#7f1d1d', marginLeft: room.status !== 'finished' ? '8px' : 'auto'}}>
+            🗑 Delete Room
+          </button>
           {room.status === 'active' && gw && (
             <span className={styles.creatorLabel} style={{color:'var(--text-muted)', fontSize:'0.78rem'}}>
               ⚡ Results process automatically after matches finish
