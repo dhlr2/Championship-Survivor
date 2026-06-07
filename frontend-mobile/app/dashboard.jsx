@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, FlatList,
-  Alert, TextInput, Modal, ActivityIndicator, RefreshControl
+  Alert, TextInput, Modal, ActivityIndicator, RefreshControl,
+  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { useAuth } from '../src/context/AuthContext';
@@ -139,33 +140,42 @@ export default function DashboardScreen() {
 
       {/* Modals */}
       <Modal visible={modal !== null} transparent animationType="slide">
-        <View style={styles.overlay}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>{modal === 'create' ? 'CREATE ROOM' : 'JOIN ROOM'}</Text>
-            <Text style={styles.modalSub}>
-              {modal === 'create' ? 'Give your room a name' : 'Enter the 6-character code'}
-            </Text>
-            <TextInput
-              style={styles.modalInput}
-              value={modal === 'create' ? roomName : joinCode}
-              onChangeText={modal === 'create' ? setRoomName : setJoinCode}
-              placeholder={modal === 'create' ? "e.g. The Lads League" : "AB12CD"}
-              placeholderTextColor={COLORS.textMuted}
-              autoCapitalize={modal === 'join' ? 'characters' : 'words'}
-              autoFocus
-            />
-            <TouchableOpacity
-              style={[styles.modalBtn, saving && { opacity: 0.5 }]}
-              onPress={modal === 'create' ? createRoom : joinRoom}
-              disabled={saving}
-            >
-              <Text style={styles.modalBtnText}>{saving ? 'Please wait...' : modal === 'create' ? 'Create' : 'Join'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModal(null)} style={{ marginTop: 12, alignItems: 'center' }}>
-              <Text style={{ color: COLORS.textMuted, fontSize: 14 }}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView
+            style={styles.overlay}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          >
+            <TouchableWithoutFeedback>
+              <View style={styles.modalCard}>
+                <Text style={styles.modalTitle}>{modal === 'create' ? 'CREATE ROOM' : 'JOIN ROOM'}</Text>
+                <Text style={styles.modalSub}>
+                  {modal === 'create' ? 'Give your room a name' : 'Enter the 6-character code'}
+                </Text>
+                <TextInput
+                  style={styles.modalInput}
+                  value={modal === 'create' ? roomName : joinCode}
+                  onChangeText={modal === 'create' ? setRoomName : setJoinCode}
+                  placeholder={modal === 'create' ? "e.g. The Lads League" : "AB12CD"}
+                  placeholderTextColor={COLORS.textMuted}
+                  autoCapitalize={modal === 'join' ? 'characters' : 'words'}
+                  returnKeyType="done"
+                  onSubmitEditing={modal === 'create' ? createRoom : joinRoom}
+                  autoFocus
+                />
+                <TouchableOpacity
+                  style={[styles.modalBtn, saving && { opacity: 0.5 }]}
+                  onPress={modal === 'create' ? createRoom : joinRoom}
+                  disabled={saving}
+                >
+                  <Text style={styles.modalBtnText}>{saving ? 'Please wait...' : modal === 'create' ? 'Create' : 'Join'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setModal(null)} style={{ marginTop: 12, alignItems: 'center' }}>
+                  <Text style={{ color: COLORS.textMuted, fontSize: 14 }}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );

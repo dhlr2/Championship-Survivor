@@ -2,9 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ⚠️ Change this to your deployed backend URL before building
-export const API_BASE = __DEV__
-  ? 'http://localhost:3001/api'   // local dev
-  : 'https://your-api-domain.com/api';  // production
+export const API_BASE = 'https://championship-survivor.onrender.com/api';
 
 export const COLORS = {
   bgPrimary: '#080C10',
