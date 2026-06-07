@@ -19,7 +19,7 @@ export default function RootLayout() {
         >
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ headerShown: false }} />
-          <Stack.Screen name="dashboard" options={{ title: 'LMS', headerShown: true }} />
+          <Stack.Screen name="dashboard" options={{ title: 'Championship Survivor', headerShown: true }} />
           <Stack.Screen name="room/[id]" options={{ title: 'Room', headerShown: true }} />
         </Stack>
       </AuthProvider>
