@@ -17,6 +17,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchRooms();
+    // Refresh when user returns to this tab/page
+    window.addEventListener('focus', fetchRooms);
+    return () => window.removeEventListener('focus', fetchRooms);
   }, []);
 
   async function fetchRooms() {

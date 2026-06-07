@@ -63,6 +63,15 @@ export default function RoomPage() {
     } catch (err) { toast.error(err.toString()); }
   }
 
+  async function leaveRoom() {
+    if (!window.confirm('Are you sure you want to leave this room? Your picks will be removed.')) return;
+    try {
+      await api.post(`/rooms/${id}/leave`);
+      toast.success('You have left the room.');
+      navigate('/dashboard');
+    } catch (err) { toast.error(err.toString()); }
+  }
+
   async function deleteRoom() {
     if (!window.confirm('Are you sure you want to DELETE this room? This will permanently remove all picks, results and players. This cannot be undone.')) return;
     try {
@@ -99,6 +108,15 @@ export default function RoomPage() {
         </div>
         <div className={styles.headerRight}>
           <MyCardsBadge membership={myMembership} />
+          {!isCreator && (
+            <button
+              className="btn btn-ghost"
+              onClick={leaveRoom}
+              style={{ padding: '8px 12px', fontSize: '0.82rem', color: 'var(--red)', borderColor: 'rgba(255,59,59,0.3)' }}
+            >
+              Leave
+            </button>
+          )}
         </div>
       </header>
 

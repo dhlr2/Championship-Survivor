@@ -273,6 +273,40 @@ router.delete('/:id', authenticate, async (req, res) => {
   }
 });
 
+
+// POST /api/rooms/:id/leave — member leaves the room
+router.post('/:id/leave', authenticate, async (req, res) => {
+  try {
+    const roomRes = await db.query('SELECT * FROM rooms WHERE id=$1', [req.params.id]);
+    const room = roomRes.rows[0];
+    if (!room) return res.status(404).json({ error: 'Room not found' });
+
+    // Creator cannot leave their own room — they must delete it
+    if (room.creator_id === req.user.id) {
+      return res.status(400).json({ error: 'As the creator you cannot leave — delete the room instead' });
+    }
+
+    // Check membership
+    const memberCheck = await db.query(
+      'SELECT id FROM room_members WHERE room_id=$1 AND user_id=$2',
+      [req.params.id, req.user.id]
+    );
+    if (memberCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'You are not in this room' });
+    }
+
+    // Remove member and their picks
+    await db.query('DELETE FROM picks WHERE room_id=$1 AND user_id=$2', [req.params.id, req.user.id]);
+    await db.query('DELETE FROM room_members WHERE room_id=$1 AND user_id=$2', [req.params.id, req.user.id]);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;
+
 
 
