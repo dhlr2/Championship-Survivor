@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, FlatList,
   Alert, TextInput, Modal, ActivityIndicator, RefreshControl
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { useAuth } from '../src/context/AuthContext';
 import api, { COLORS } from '../src/utils/api';
 
@@ -26,7 +26,11 @@ export default function DashboardScreen() {
     setLoading(false);
     setRefreshing(false);
   }
+
   useEffect(() => { fetchRooms(); }, []);
+
+  // Refresh when navigating back to this screen
+  useFocusEffect(useCallback(() => { fetchRooms(); }, []));
 
   async function createRoom() {
     if (!roomName.trim()) return;

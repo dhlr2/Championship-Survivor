@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ⚠️ Change this to your deployed backend URL before building
 export const API_BASE = __DEV__
-  ? 'http://192.168.4.159:3001/api'   // local dev
+  ? 'http://localhost:3001/api'   // local dev
   : 'https://your-api-domain.com/api';  // production
 
 export const COLORS = {
@@ -35,7 +35,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (res) => res.data,
   async (err) => {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 && !err.config?.url?.includes('/auth/')) {
       await AsyncStorage.multiRemove(['lms_token', 'lms_user']);
     }
     return Promise.reject(err.response?.data?.error || err.message);
