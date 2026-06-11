@@ -182,8 +182,10 @@ router.post('/forgot-password', async (req, res) => {
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
+    const toEmail = process.env.RESEND_TEST_EMAIL || email.toLowerCase();
+
     await sendEmail(
-      email.toLowerCase(),
+      toEmail,
       'Reset your Championship Survivor password',
       `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #080C10; color: #F0F4F8; padding: 40px; border-radius: 12px;">
