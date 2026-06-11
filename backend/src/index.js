@@ -16,7 +16,11 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 app.set('trust proxy', 1); // Trust Render's proxy
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173', 'http://localhost:3000'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://championship-survivor.vercel.app'
+  ],
   credentials: true,
 }));
 
