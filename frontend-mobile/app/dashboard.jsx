@@ -74,10 +74,12 @@ export default function DashboardScreen() {
     <View style={styles.page}>
       {/* User bar */}
       <View style={styles.userBar}>
-        <View style={[styles.avatar, { backgroundColor: user?.avatar_color }]}>
-          <Text style={styles.avatarText}>{user?.username?.[0]?.toUpperCase()}</Text>
-        </View>
-        <Text style={styles.username}>{user?.username}</Text>
+        <TouchableOpacity onPress={() => router.push('/profile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+          <View style={[styles.avatar, { backgroundColor: user?.avatar_color }]}>
+            <Text style={styles.avatarText}>{user?.username?.[0]?.toUpperCase()}</Text>
+          </View>
+          <Text style={styles.username}>{user?.username}</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>

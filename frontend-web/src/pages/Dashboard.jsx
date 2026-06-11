@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
@@ -74,10 +74,12 @@ export default function Dashboard() {
         <div className={styles.headerInner}>
           <h1 className={`display-font ${styles.logo}`}>CS</h1>
           <div className={styles.headerRight}>
-            <div className={styles.avatar} style={{ background: user?.avatar_color }}>
-              {user?.username?.[0]?.toUpperCase()}
-            </div>
-            <span className={styles.username}>{user?.username}</span>
+            <Link to="/profile" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+              <div className={styles.avatar} style={{ background: user?.avatar_color }}>
+                {user?.username?.[0]?.toUpperCase()}
+              </div>
+              <span className={styles.username}>{user?.username}</span>
+            </Link>
             <button className="btn btn-ghost" onClick={logout} style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
               Sign Out
             </button>

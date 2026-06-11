@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import AuthPage from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import RoomPage from './pages/Room';
+import ProfilePage from './pages/Profile';
 import '../src/styles/globals.css';
 
 function Protected({ children }) {
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/login" element={<PublicOnly><AuthPage /></PublicOnly>} />
           <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
           <Route path="/room/:id" element={<Protected><RoomPage /></Protected>} />
+          <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
