@@ -102,6 +102,11 @@ export default function LoginScreen() {
                 placeholderTextColor={COLORS.textMuted}
                 secureTextEntry
               />
+              {mode === 'login' && (
+                <TouchableOpacity onPress={() => router.push('/forgot-password')} style={{ alignSelf: 'flex-end', marginTop: 6 }}>
+                  <Text style={{ color: COLORS.textMuted, fontSize: 13 }}>Forgot password?</Text>
+                </TouchableOpacity>
+              )}
             </View>
 
             <TouchableOpacity

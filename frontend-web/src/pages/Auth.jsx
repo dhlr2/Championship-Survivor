@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import styles from './Auth.module.css';
@@ -106,6 +106,11 @@ export default function AuthPage() {
                 required
                 minLength={6}
               />
+              {mode === 'login' && (
+                <Link to="/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textDecoration: 'none', textAlign: 'right', marginTop: '4px' }}>
+                  Forgot password?
+                </Link>
+              )}
             </div>
 
             <button

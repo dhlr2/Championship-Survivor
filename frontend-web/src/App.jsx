@@ -5,6 +5,8 @@ import AuthPage from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import RoomPage from './pages/Room';
 import ProfilePage from './pages/Profile';
+import ForgotPasswordPage from './pages/ForgotPassword';
+import ResetPasswordPage from './pages/ResetPassword';
 import '../src/styles/globals.css';
 
 function Protected({ children }) {
@@ -35,6 +37,8 @@ export default function App() {
         />
         <Routes>
           <Route path="/login" element={<PublicOnly><AuthPage /></PublicOnly>} />
+          <Route path="/forgot-password" element={<PublicOnly><ForgotPasswordPage /></PublicOnly>} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
           <Route path="/room/:id" element={<Protected><RoomPage /></Protected>} />
           <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
