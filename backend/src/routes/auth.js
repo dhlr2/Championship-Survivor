@@ -14,7 +14,7 @@ async function sendEmail(to, subject, html) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Championship Survivor <noreply@championship-survivor.vercel.app>',
+      from: 'Championship Survivor <onboarding@resend.dev>',
       to,
       subject,
       html,
